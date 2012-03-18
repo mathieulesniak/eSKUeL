@@ -44,45 +44,7 @@ class controller extends simple_object {
 			$this->db_list = $db_list;
 		}
 	}
-
-	/**
- 	* Build the HTML used in side navigation 
- 	*
- 	* @return string HTML db/table listing
- 	* @param void
- 	* @access private
- 	*/
-	private function render_db_table_listing() {
-		$output = '<ul>' . "\n";
-		foreach ( $this->db_list as $database ) {
-			$output .= '	<li><a href="?db=' . $database . '">' . $database  . '</a>';
-			if ( $this->current_db !== NULL && $database == $this->current_db->name ) {
-				if ( is_array($this->current_db->tables) ) {
-					$output .= '	<ul>' . "\n";
-					foreach ( $this->current_db->tables as $table ) {
-						$output .= '		<li><a href="?db=' . $database . '&tbl=' .$table->name . '">' . $table->name . '</a></li>' . "\n";
-					}
-					$output .= '	</ul>' . "\n";
-				}
-			}
-			$output .= '	</li>' . "\n";
-		}
-		$output .= '</ul>' . "\n";
-		
-		return $output;
-	}
-
-	/**
- 	* Build the HTML used in main tab when DB is selected and no table selected 
- 	*
- 	* @return string HTML db/table listing
- 	* @param void
- 	* @access private
- 	*/
-	private function render_db_homepage() {
- 
-	}
-
+	
 	private function template_start() {
 		$template_data = array();
 
