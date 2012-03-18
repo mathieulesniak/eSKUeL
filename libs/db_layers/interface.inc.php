@@ -1,16 +1,18 @@
 <?php
-interface db_layer {
+
+interface db_layer 
+{
 
 	// Reminder only
 	// Needed member vars
 	// var $specific_methods = array();
 	// var $field_types = array();
 	// var $field_functions = array();
-	
+
 	function connect();
-	
+
 	function query($sql);
-	
+
 	function get_results();
 
 	function num_rows();
@@ -42,7 +44,6 @@ interface db_layer {
 	function table_change_type();
 
 	function table_empty($db_name, $table_name);
-
 
 }
 

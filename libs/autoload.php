@@ -3,6 +3,7 @@ return array(
 'Class_Loader' => './init.inc.php',
 'Class_Loader__ClassNotFound_Exception' => './init.inc.php',
 'Class_Loader__Exception' => './init.inc.php',
+'ObjectException' => './object/object_exception.inc.php',
 'URLBuilder' => './url_builder.inc.php',
 'controller' => './object/object_controller.inc.php',
 'database' => './object/object_database.inc.php',

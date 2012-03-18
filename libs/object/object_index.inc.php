@@ -1,5 +1,8 @@
 <?php
-class index extends simple_object {
+
+class index extends simple_object
+{
+
 	var $properties = array(
 		'key_name',
 		'non_unique',
@@ -12,22 +15,25 @@ class index extends simple_object {
 		'null',
 		'index_type',
 		'comment'
-		);
+	);
 
 	var $private_properties = array(
 		'_sql_handler'
-		);
+	);
 
-	function __construct() {
-
+	function __construct()
+	{
 	}
 
-	static function load_from_array($data, $sql_handler) {
+	static function load_from_array($data, $sql_handler)
+	{
 		$index = new index($sql_handler);
-	
-		foreach ( $data as $key=>$val ) {
+
+		foreach ( $data as $key=>$val )
+		{
 			$key = strtolower($key);
-			if ( $index->has_public_property($key) ) {
+			if ( $index->has_public_property($key) )
+			{
 				$index->$key = $val;
 			}
 		}
@@ -35,5 +41,6 @@ class index extends simple_object {
 		return $index;
 	}
 
-
 }
+
+?>
