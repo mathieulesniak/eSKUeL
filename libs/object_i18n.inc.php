@@ -10,7 +10,7 @@ class i18n {
 		if ( is_file('libs/i18n/' . $lang_code . '/' . $lang_code . '.inc.php') ) {
 			include 'libs/i18n/' . $lang_code . '/' . $lang_code . '.inc.php';
 			foreach ( $translations['runtimes'] as $key=>$val ) {
-				define('I18N_' . $key, $val);
+				define('I18N_' . strtoupper($key), $val);
 			}
 
 			unset($translations['runtimes']);
