@@ -6,9 +6,9 @@ function _p($var) {
 }
 
 function convert_from_bytes($bytes) {
-   $unit = array(__('o'), __('Ko'),__('Mo'),__('Go'),__('To'),__('Po'),__('Eo'));
+   $unit = array(__('b'), __('Kb'),__('Mb'),__('Gb'),__('Tb'),__('Pb'),__('Eb'));
    $precision = 1;
-   
+
    return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision).' '.$unit[$i];
 }
 
