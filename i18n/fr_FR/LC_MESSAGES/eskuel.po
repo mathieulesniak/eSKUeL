@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eSKUeL 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-18 21:48+0100\n"
+"POT-Creation-Date: 2012-03-18 22:16+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: loranger <loranger@free.fr>\n"
 "Language-Team: eSKUeL <contact@eskuel.com>\n"
@@ -15,6 +15,34 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ../../../\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: libs/functions.inc.php:59
+msgid "b"
+msgstr "o"
+
+#: libs/functions.inc.php:59
+msgid "Kb"
+msgstr "Ko"
+
+#: libs/functions.inc.php:59
+msgid "Mb"
+msgstr "Mo"
+
+#: libs/functions.inc.php:59
+msgid "Gb"
+msgstr "Go"
+
+#: libs/functions.inc.php:59
+msgid "Tb"
+msgstr "To"
+
+#: libs/functions.inc.php:59
+msgid "Pb"
+msgstr "Po"
+
+#: libs/functions.inc.php:59
+msgid "Eb"
+msgstr "Eo"
 
 #: libs/object/object_exception.inc.php:23
 #, php-format
@@ -38,4 +66,24 @@ msgstr "Impossible de charger la liste des tables de %s"
 #: libs/object/object_exception.inc.php:35
 msgid "Unknown Object Exception"
 msgstr "Exception d'objet inconnue"
+
+#: libs/views/template_db_homepage.php:3
+msgid "Table"
+msgstr "Table"
+
+#: libs/views/template_db_homepage.php:4
+msgid "Rows"
+msgstr "Lignes"
+
+#: libs/views/template_db_homepage.php:5
+msgid "Size"
+msgstr "Taille"
+
+#: libs/views/template_db_homepage.php:6
+msgid "Comment"
+msgstr "Commentaire"
+
+#: libs/views/template_db_homepage.php:7
+msgid "Action"
+msgstr "Action"
 

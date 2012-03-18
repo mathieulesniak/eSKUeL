@@ -56,10 +56,14 @@ function _p($var) {
 }
 
 function convert_from_bytes($bytes) {
-   $unit = array(__('b'), __('Kb'),__('Mb'),__('Gb'),__('Tb'),__('Pb'),__('Eb'));
+   $unit = array(_('b'), _('Kb'),_('Mb'),_('Gb'),_('Tb'),_('Pb'),_('Eb'));
    $precision = 1;
 
-   return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision).' '.$unit[$i];
+   return number_format(round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision),
+						$precision,
+						I18N_DECIMAL_SEPARATOR,
+						I18N_THOUSAND_SEPARATOR)
+		. ' ' . $unit[$i];
 }
 
 ?>

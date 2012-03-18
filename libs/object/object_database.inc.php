@@ -6,7 +6,7 @@ class database extends simple_object
 	var $properties = array(
 		'name',
 		'tables',
-		'total_records',
+		'total_rows',
 		'total_size'
 	);
 
