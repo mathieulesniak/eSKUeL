@@ -7,9 +7,6 @@
 	<th>Action</th>
 </tr>
 <?php
-$tt = 41;
-define('TEST', $tt);
-
 foreach ( $table_list as $table ) {
 	echo '<tr>' . "\n";
 	echo '	<td>' . $table->name . '</td>' . "\n";
