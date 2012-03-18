@@ -16,7 +16,7 @@ class controller extends simple_object {
 
 		// Get current state from REQUEST
 		$current_db 	= isset($_GET['db']) ? $_GET['db'] : ( isset($_POST['db']) ? $_POST['db'] : '');
-		$current_table 	= isset($_GET['table']) ? $_GET['table'] : ( isset($_POST['table']) ? $_POST['table'] : '');
+		$current_table 	= isset($_GET['tbl']) ? $_GET['tbl'] : ( isset($_POST['tbl']) ? $_POST['tbl'] : '');
 		$current_action = isset($_GET['action']) ? $_GET['action'] : ( isset($_POST['action']) ? $_POST['action'] : '');
 
 		if ( $current_db != '' ) {
@@ -116,6 +116,12 @@ class controller extends simple_object {
 		$this->template_render('table_homepage', $template_data);
 	}
 
+	private function template_db_homepage() {
+		$template_data = array();
+
+		$this->template_render('db_homepage', $template_data);
+	}
+
 	private function template_render($template, $template_data) {
 		if ( is_file('libs/views/template_' . $template . '.php') ) {
 			foreach ( $template_data as $key=>$val ) {
@@ -132,6 +138,23 @@ class controller extends simple_object {
 	function render() {
 		$this->template_start();
 		$this->template_db_list();
+		
+		if ( $this->current_db == NULL ) {
+
+		}
+		else {
+			if ( $this->current_table != NULL ) {
+				switch ( $this->current_action ) {
+
+					default:
+						$this->template_table_homepage();
+					break;
+				}
+			}
+			else {
+				$this->template_db_homepage();
+			}
+		}
 
 		
 
