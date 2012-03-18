@@ -118,6 +118,7 @@ class controller extends simple_object {
 
 	private function template_db_homepage() {
 		$template_data = array();
+		$template_data['table_list']	= $this->current_db->tables;
 
 		$this->template_render('db_homepage', $template_data);
 	}
