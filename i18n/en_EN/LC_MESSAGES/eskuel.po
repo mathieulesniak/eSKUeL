@@ -1,0 +1,41 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: eSKUeL 2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-18 21:48+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: loranger <loranger@free.fr>\n"
+"Language-Team: eSKUeL <contact@eskuel.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: ../../../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: libs/object/object_exception.inc.php:23
+#, php-format
+msgid "Unknown property %s"
+msgstr ""
+
+#: libs/object/object_exception.inc.php:26
+msgid "Wrong scope"
+msgstr ""
+
+#: libs/object/object_exception.inc.php:29
+#, php-format
+msgid "Template %s not found"
+msgstr ""
+
+#: libs/object/object_exception.inc.php:32
+#, php-format
+msgid "Unable to load table list from %s"
+msgstr ""
+
+#: libs/object/object_exception.inc.php:35
+msgid "Unknown Object Exception"
+msgstr ""
+
