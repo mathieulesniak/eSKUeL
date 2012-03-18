@@ -7,8 +7,10 @@ ini_set('html_errors', true);
 define( 'LIBS_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR ); // TODO use __DIR__ with PHP 5.3
 define( 'ROOT_PATH', LIBS_PATH . '../' );
 
-require_once ( LIBS_PATH . 'init.inc.php' );
-
+# Load usefull functions
 require_once ( LIBS_PATH . 'functions.inc.php');
+
+# Start your engine
+require_once ( LIBS_PATH . 'init.inc.php' );
 
 ?>
