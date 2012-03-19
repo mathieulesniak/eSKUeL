@@ -13,4 +13,13 @@ require_once ( LIBS_PATH . 'functions.inc.php');
 # Start your engine
 require_once ( LIBS_PATH . 'init.inc.php' );
 
+# Localization related
+/// POINT is the default decimal separator
+_('.');
+/// COMMA is the default thousand separator
+_(',');
+/// Default date formatting
+_('Y-m-d');
+
+
 ?>
