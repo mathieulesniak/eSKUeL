@@ -61,8 +61,8 @@ function convert_from_bytes($bytes) {
 
    return number_format(round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision),
 						$precision,
-						_('I18N_DECIMAL_SEPARATOR'),
-						_('I18N_THOUSAND_SEPARATOR'))
+						_('NUMBER_DECIMAL_SEPARATOR'),
+						_('NUMBER_THOUSAND_SEPARATOR'))
 		. ' ' . $unit[$i];
 }
 
