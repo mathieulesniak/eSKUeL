@@ -242,8 +242,11 @@ class sql_handler extends simple_object implements db_layer
 	{
 	}
 
-	function table_change_type()
+	function table_change_type($db_name, $table_name, $table_type)
 	{
+		$sql = sprintf("ALTER TABLE `%s`.`%s` ENGINE=%s", $db_name, $table_name, $table_type);
+
+		return $this->query($sql);
 	}
 
 	function table_empty($db_name, $table_name)

@@ -41,7 +41,7 @@ interface db_layer
 
 	function table_add_field();
 
-	function table_change_type();
+	function table_change_type($db_name, $table_name, $type);
 
 	function table_empty($db_name, $table_name);
 
