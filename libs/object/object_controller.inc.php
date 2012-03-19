@@ -93,6 +93,8 @@ class controller extends simple_object
 	{
 		$template_data = array();
 		$template_data['table_list']	= $this->current_db->tables;
+		$template_data['total_rows']	= $this->current_db->total_rows;
+		$template_data['total_size']	= $this->current_db->total_size;
 
 		$this->template_render('db_homepage', $template_data);
 	}
