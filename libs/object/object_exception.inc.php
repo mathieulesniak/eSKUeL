@@ -2,10 +2,12 @@
 
 class ObjectException extends Exception
 {
-	const UNKNOWN_PROPERTY		= 1;
-	const WRONG_SCOPE			= 2;
-	const TEMPLATE_NOT_FOUND	= 3;
-	const GET_TABLES_FAIL		= 4;
+	const UNKNOWN_PROPERTY			= 1;
+	const WRONG_SCOPE				= 2;
+	const TEMPLATE_NOT_FOUND		= 3;
+	const GET_TABLES_FAIL			= 4;
+	const MISSING_TRANSLATION_FILE	= 5;
+	const MISSING_TRANSLATION		= 6;
 
 	function __construct()
 	{
@@ -30,6 +32,12 @@ class ObjectException extends Exception
 				break;
 			case self::GET_TABLES_FAIL :
 				return _("Unable to load table list from %s");
+				break;
+			case self::MISSING_TRANSLATION_FILE :
+				return _("Missing translation file for locale %s");
+				break;
+			case self::MISSING_TRANSLATION :
+				return _("Missing translation for '%s'");
 				break;
 			default:
 				return _('Unknown Object Exception');
