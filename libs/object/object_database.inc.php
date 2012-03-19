@@ -19,7 +19,7 @@ class database extends simple_object
 		$this->name				= $name;
 		$this->_sql_handler		= $sql_handler;
 		$this->tables			= array();
-		$this->total_records	= 0;
+		$this->total_rows		= 0;
 		$this->total_size		= 0;
 	}
 
@@ -55,8 +55,8 @@ class database extends simple_object
 					$current_table->database = $this;
 
 					// Compute stats
-					$this->total_size		+= $current_table->data_length + $current_table->index_length;
-					$this->total_records	+= $current_table->rows;
+					$this->total_size	+= $current_table->data_length + $current_table->index_length;
+					$this->total_rows	+= $current_table->rows;
 
 					$tables[$resultset['Name']] = $current_table;
 				}
