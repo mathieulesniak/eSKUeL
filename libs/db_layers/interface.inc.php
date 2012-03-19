@@ -23,7 +23,7 @@ interface db_layer
 
 	function db_get_tables_infos($db_name);
 
-	function db_create($db_name);
+	function db_create($db_name, $db_options = array());
 
 	function db_delete($db_name);
 

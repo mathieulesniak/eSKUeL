@@ -6,7 +6,9 @@ class sql_handler extends simple_object implements db_layer
 		'hostname',
 		'database',
 		'username',
-		'password'
+		'password',
+		'character_set',
+		'collate'
 	);
 
 	var $private_properties = array(
@@ -176,8 +178,19 @@ class sql_handler extends simple_object implements db_layer
 		return $db_list;
 	}
 
-	function db_create($db_name)
+	function db_create($db_name, $db_options = array())
 	{
+		$valid_options = array('CHARACTER SET', 'COLLATE');
+		$sql = sprintf("CREATE DATABASE `%s`", $db_name);
+		foreach ( $db_options as $key=>$val )
+		{
+				if ( in_array($key, $valid_options) )
+				{
+						$sql .= sprintf(" %s %s", $key, $val);
+				}
+		}
+		
+		$this->query($sql);
 	}
 
 	function db_delete($db_name)
@@ -216,7 +229,7 @@ class sql_handler extends simple_object implements db_layer
 
 	function table_rename($db_old_name, $table_old_name, $db_new_name, $table_new_name)
 	{
-		$sql = sprtinf("ALTER TABLE `%s`.`%s` RENAME `%s`.`%s`;", $db_old_name, $table_old_name, $db_new_name, $table_new_name);
+		$sql = sprintf("ALTER TABLE `%s`.`%s` RENAME `%s`.`%s`;", $db_old_name, $table_old_name, $db_new_name, $table_new_name);
 
 		return $this->query($sql);
 	}
@@ -233,7 +246,8 @@ class sql_handler extends simple_object implements db_layer
 	{
 	}
 
-	function table_empty($db_name, $table_name) {
+	function table_empty($db_name, $table_name)
+	{
 		$sql = sprintf("DELETE FROM `%s`.`%s`;", $db_name, $table_name);
 
 		return $this->query($sql);
