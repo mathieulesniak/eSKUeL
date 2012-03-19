@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eSKUeL 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-18 22:16+0100\n"
+"POT-Creation-Date: 2012-03-19 14:33+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: loranger <loranger@free.fr>\n"
 "Language-Team: eSKUeL <contact@eskuel.com>\n"
@@ -44,26 +44,51 @@ msgstr "Po"
 msgid "Eb"
 msgstr "Eo"
 
-#: libs/object/object_exception.inc.php:23
+#. / POINT is the default decimal separator
+#: libs/globals.inc.php:18
+msgid "."
+msgstr ","
+
+#. / COMMA is the default thousand separator
+#: libs/globals.inc.php:20
+msgid ","
+msgstr " "
+
+#. / Default date formatting
+#: libs/globals.inc.php:22
+msgid "Y-m-d"
+msgstr "d/m/Y"
+
+#: libs/object/object_exception.inc.php:25
 #, php-format
 msgid "Unknown property %s"
 msgstr "Propriété %s inconnue"
 
-#: libs/object/object_exception.inc.php:26
+#: libs/object/object_exception.inc.php:28
 msgid "Wrong scope"
 msgstr "Portée incorrecte"
 
-#: libs/object/object_exception.inc.php:29
+#: libs/object/object_exception.inc.php:31
 #, php-format
 msgid "Template %s not found"
 msgstr "Template %s introuvable"
 
-#: libs/object/object_exception.inc.php:32
+#: libs/object/object_exception.inc.php:34
 #, php-format
 msgid "Unable to load table list from %s"
 msgstr "Impossible de charger la liste des tables de %s"
 
-#: libs/object/object_exception.inc.php:35
+#: libs/object/object_exception.inc.php:37
+#, php-format
+msgid "Missing translation file for locale %s"
+msgstr "Fichier de traduction manquant pour la locale %s"
+
+#: libs/object/object_exception.inc.php:40
+#, php-format
+msgid "Missing translation for '%s'"
+msgstr "Traduction manquante pour '%s'"
+
+#: libs/object/object_exception.inc.php:43
 msgid "Unknown Object Exception"
 msgstr "Exception d'objet inconnue"
 
