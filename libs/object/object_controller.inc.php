@@ -39,7 +39,7 @@ class controller extends simple_object
 	/**
 	* Construct internal array of server databases
 	*
-	* @return voide
+	* @return void
 	* @param void
 	* @access private
 	*/
