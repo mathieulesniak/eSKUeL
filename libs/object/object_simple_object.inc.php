@@ -8,7 +8,10 @@ class simple_object
 
 	protected $private_properties	= array();
 	protected $private_values		= array();
-
+    
+    protected $output_fields = array();
+    
+	
 	function __construct()
 	{
 	}
@@ -78,6 +81,22 @@ class simple_object
 
 		return in_array($name, $search_array);
 	}
+
+	public function to_JSON()
+    {
+        if ( count($this->output_fields) )
+        {
+            $object = new stdClass();
+            foreach ( $this->output_fields as $key=>$value ) {
+                $object->$key = $this->$value;
+            }
+            
+            return $object;
+        }
+        else {
+            return NULL;
+        }
+    }
 
 }
 
