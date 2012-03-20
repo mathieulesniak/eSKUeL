@@ -26,7 +26,7 @@ class database extends simple_object
 	static function load($name, $sql_handler)
 	{
 		$database = new database($name, $sql_handler);
-		$database->get_tables();
+		//$database->get_tables();
 
 		return $database;
 	}
