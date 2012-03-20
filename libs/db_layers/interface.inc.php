@@ -12,6 +12,8 @@ interface db_layer
 	function connect();
 
 	function query($sql);
+    
+    function query_and_fetch($sql);
 
 	function get_results();
 
@@ -35,7 +37,7 @@ interface db_layer
 
 	function table_copy($db_from, $table_from, $db_to, $table_to, $copy_with_data);
 
-	function table_move();
+	function table_move($db_from, $table_from, $db_to, $table_to);
 
 	function table_rename($db_old_name, $old_name, $db_new_name, $new_name);
 
