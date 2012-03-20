@@ -32,10 +32,11 @@ class table extends simple_object
 		$this->indexes		= array();
 	}
 
-	static function load($table_name, $sql_handler)
+	static function load($table_name, $db_name, $sql_handler)
 	{
 		$table = new table($sql_handler);
-		$table->name = $table_name;
+		$table->name 		= $table_name;
+		$table->database 	= $db_name;
 
 		return $table;
 	}
@@ -73,7 +74,9 @@ class table extends simple_object
 	*/
 	function get_fields()
 	{
-		$fields_data = $this->_sql_handler->table_get_fields($this->database->name, $this->name);
+		return $this->_sql_handler->table_get_fields($this->database->name, $this->name);
+
+/*
 		if ( $fields_data !== false )
 		{
 			$fields = array();
@@ -88,7 +91,7 @@ class table extends simple_object
 			}
 
 			$this->fields = $fields;
-		}
+		}*/
 	}
 	/**
 	* Build an array of Index objects of current table
@@ -99,8 +102,8 @@ class table extends simple_object
 	*/
 	function get_indexes()
 	{
-		$indexes_data = $this->_sql_handler->table_get_indexes($this->database->name, $this->name);
-		if ( $indexes_data !== false )
+		return $this->_sql_handler->table_get_indexes($this->database->name, $this->name);
+		/*if ( $indexes_data !== false )
 		{
 			$indexes = array();
 			foreach ( $indexes_data as $resultset )
@@ -115,7 +118,7 @@ class table extends simple_object
 			$this->indexes = $indexes;
 		}
 
-		return $this;
+		return $this;*/
 	}
 
 	function add_field()
@@ -134,8 +137,11 @@ class table extends simple_object
 	{
 	}
 
-	function copy()
+	function copy($db_to, $table_to, $copy_with_data = false)
 	{
+		return $this->_sql_handler->table_copy($this->database->name, 
+										$this->name, 
+										$db_to, $table_to, $copy_with_data);
 	}
 
 	function move()
@@ -143,6 +149,10 @@ class table extends simple_object
 	}
 
 	function delete()
+	{
+	}
+
+	function do_empty()
 	{
 	}
 
