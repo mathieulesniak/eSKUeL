@@ -142,9 +142,16 @@ class json_controller extends simple_object {
 			case 'change_type':
 
 			break;
-
+            
+            case 'query':
+                $mandatory = array('query');
+				if ( $this->check_parameters($mandatory) ) {
+                    $this->answer = $table->query($parameters->query)->to_JSON();
+                }
+                break;
+        
 			case 'empty':
-				$this->answer = $table->do_empty()->to_JSON();
+                $this->answer = $table->do_empty()->to_JSON();
 			break;
 
 			default:
@@ -172,8 +179,9 @@ class json_controller extends simple_object {
 	private function set_error($message) 
 	{
 		$this->answer = new stdClass();
-		$this->answer->data = $message;
-		$this->answer->message = null;
+		$this->answer->data = null;
+		$this->answer->message = $message;
+        $this->answer->last_query = null;
 		$this->answer->return_code = -1;
 	}
 
