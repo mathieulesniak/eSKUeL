@@ -17,13 +17,15 @@ class sql_handler extends simple_object implements db_layer
 		'_error_no',
 		'_error_msg',
 		'_last_query',
-        '_last_results'
+        '_last_results',
+        '_last_message'
 	);
     
     var $output_fields = array(
-        'message'       => '_last_query',
+        'last_query'    => '_last_query',
         'return_code'   => '_error_no',
-        'data'          => '_last_results'
+        'data'          => '_last_results',
+        'message'       => '_last_message'
     );
     
 	var $specific_methods = array(
@@ -171,12 +173,20 @@ class sql_handler extends simple_object implements db_layer
         $this->_last_query      = NULL;
         $this->_last_results    = NULL;
 
-		$this->_query_id 	= mysql_query($query, $this->_db_link);
-		$this->_last_query 	= $query;
-		$this->_error_no 	= mysql_errno();
-		$this->_error_msg 	= mysql_error();
-
-        if ( $do_fetch )
+		$this->_query_id 	    = mysql_query($query, $this->_db_link);
+		$this->_last_query 	    = $query;
+		$this->_error_no 	    = mysql_errno();
+		$this->_error_msg 	    = mysql_error();
+        if ( $this->_error_no !== 0 )
+        {
+                $this->_last_message    = $this->_error_msg;
+        }
+        else
+        {
+                $this->_last_message    = mysql_info($this->_db_link);        
+        }
+        
+        if ( $do_fetch && $this->_error_no == 0 )
         {
                 $this->fetch_results();
         }
@@ -187,11 +197,15 @@ class sql_handler extends simple_object implements db_layer
 	{
 		$results        = array();
         $results_fields = array();
-		while ( $record = mysql_fetch_array($this->_query_id, MYSQL_NUM) ) {
-			$results[] = $record;
-		}
-        if ( count($results) ) {
-                
+        if ( $this->num_rows() )
+        {
+                while ( $record = mysql_fetch_array($this->_query_id, MYSQL_NUM) )
+                {
+                    $results[] = $record;
+                }
+        }
+        if ( count($results) )
+        {
                 $i = 0;
                 $nb_fields = mysql_num_fields($this->_query_id);
                 
