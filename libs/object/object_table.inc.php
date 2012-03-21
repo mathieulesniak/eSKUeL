@@ -28,6 +28,7 @@ class table extends simple_object
 	function __construct($sql_handler)
 	{
 		$this->_sql_handler = $sql_handler;
+		
 		$this->fields		= array();
 		$this->indexes		= array();
 	}
@@ -35,9 +36,10 @@ class table extends simple_object
 	static function load($table_name, $db_name, $sql_handler)
 	{
 		$table = new table($sql_handler);
+		
 		$table->name 		= $table_name;
 		$table->database 	= $db_name;
-
+		$table->_sql_handler->select_db($table->database->name);
 		return $table;
 	}
 
