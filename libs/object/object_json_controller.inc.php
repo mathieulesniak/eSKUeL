@@ -124,6 +124,10 @@ class json_controller extends simple_object {
 			break;
 
 			case 'move':
+                $mandatory = array('db_to', 'tbl_to');
+                if ( $this->check_parameters($mandatory) ) {
+                    $this->answer = $table->move($parameters->db_to, $parameters->tbl_to)->to_JSON();
+                }
 
 			break;
 
