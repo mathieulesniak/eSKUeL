@@ -152,8 +152,14 @@ class table extends simple_object
 	{
 	}
 
+	function query($query)
+	{
+		return $this->_sql_handler->query_and_fetch($query);
+	}
 	function do_empty()
 	{
+		return $this->_sql_handler->table_empty($this->database->name,
+												$this->name);
 	}
 
 }
