@@ -21,5 +21,4 @@ _(',');
 /// Default date formatting
 _('Y-m-d');
 
-
 ?>

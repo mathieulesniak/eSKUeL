@@ -8,6 +8,7 @@ class ObjectException extends Exception
 	const GET_TABLES_FAIL			= 4;
 	const MISSING_TRANSLATION_FILE	= 5;
 	const MISSING_TRANSLATION		= 6;
+	const MISSING_JSON_PARAMETER	= 7;
 
 	function __construct()
 	{
@@ -38,6 +39,9 @@ class ObjectException extends Exception
 				break;
 			case self::MISSING_TRANSLATION :
 				return _("Missing translation for '%s'");
+				break;
+			case self::MISSING_JSON_PARAMETER :
+				return _("Missing '%s' parameter");
 				break;
 			default:
 				return _('Unknown Object Exception');
