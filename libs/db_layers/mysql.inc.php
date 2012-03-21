@@ -225,8 +225,20 @@ class sql_handler extends simple_object implements db_layer
 
 	function num_rows()
 	{
-		return mysql_num_rows($this->_query_id);
+        if ( is_resource($this->_query_id) )
+        {
+                return mysql_num_rows($this->_query_id);
+        }
+        else {
+                return false;
+        }
 	}
+    
+    function select_db($db)
+    {
+        mysql_select_db($db, $this->_db_link);
+        return $this;
+    }
     
     function server_processlist()
     {
