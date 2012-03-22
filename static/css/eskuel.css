@@ -146,9 +146,9 @@ table.datas
 }
 
 .table tbody tr.selected:hover td,
-.table tbody tr.selected:hover th 
+.table tbody tr.selected:hover th
 {
-  background-color: #DEF2AF;
+	color: #FFFFFF;
 }
 
 
