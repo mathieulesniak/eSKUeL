@@ -1,7 +1,6 @@
 <?php
 require '../libs/globals.inc.php';
 
-var_dump( HOST );
 $sql_handler = new sql_handler(HOST, USERNAME, PASSWORD);
 
 $controller = new json_controller($sql_handler);
