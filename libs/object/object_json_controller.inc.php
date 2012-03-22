@@ -7,7 +7,10 @@ class json_controller extends simple_object {
 	);
 
 	var $private_properties = array(
-		'_sql_handler'
+		'_sql_handler',
+        'scope',
+        'method',
+        'parameters'
 	);
 
 	function __construct($sql_handler)
@@ -22,11 +25,34 @@ class json_controller extends simple_object {
 		$received_json = getPostParam('json');
 		if ( $received_json != NULL )
 		{
-			$json = json_decode($received_json);
-			if ( isset($json->method) && isset($json->scope) && isset($json->parameters) ) 
+			$this->received_json = json_decode($received_json);
+            
+            if ( isset($this->received_json->path) ) {
+                $json_path = explode('/', $this->received_json->path);
+
+                // Build scope and method
+                $this->scope    = isset($json_path[1]) ? $json_path[1] : '';
+                $this->method   = isset($json_path[2]) ? $json_path[2] : '';
+                
+                $this->parameters = new stdClass();
+                // Build parameters
+                foreach ( $this->received_json as $key=>$val ) {
+                    if ( $key != 'path' ) {
+                        $this->parameters->$key = $val;
+                    }
+                }
+            }
+            else 
 			{
-				$this->received_json = $json;
-				switch ( $this->received_json->scope ) 
+				throw new Exception( ObjectException::JSON_MISSING_PARAMETER );
+			}
+            
+          
+            
+            
+			if ( $this->method != '' && $this->scope != '' /* && isset($this->parameters)*/ ) 
+			{
+				switch ( $this->scope ) 
 				{
 					case 'server':
 						$this->handle_server_scope();
@@ -53,7 +79,7 @@ class json_controller extends simple_object {
 
 	private function handle_server_scope() 
 	{
-		switch ($this->received_json->method)
+		switch ($this->method)
 		{
 			case 'processlist':
                 $this->answer = $this->_sql_handler->server_processlist()->to_JSON();
@@ -74,7 +100,7 @@ class json_controller extends simple_object {
 	{
 		$database = database::load($this->received_json->parameters->db, $this->_sql_handler);
 		
-		switch ($this->received_json->method) 
+		switch ($this->method) 
 		{
 			case 'create':
 
@@ -96,10 +122,9 @@ class json_controller extends simple_object {
 
 	private function handle_tbl_scope() 
 	{
-		$parameters = $this->received_json->parameters;
 
-		$database 	= database::load($parameters->db, $this->_sql_handler);
-		$table 		= table::load($parameters->tbl, $database, $this->_sql_handler);
+		$database 	= database::load($this->parameters->db, $this->_sql_handler);
+		$table 		= table::load($$this->parameters->tbl, $database, $this->_sql_handler);
 
 		switch ($this->received_json->method) 
 		{
@@ -115,9 +140,9 @@ class json_controller extends simple_object {
 				$mandatory = array('db_to', 'tbl_to', 'copy_data');
 				if ( $this->check_parameters($mandatory) ) {
 					$this->answer = $table->copy(
-													$parameters->db_to, 
-													$parameters->tbl_to, 
-													$parameters->copy_data
+													$this->parameters->db_to, 
+													$this->parameters->tbl_to, 
+													$this->parameters->copy_data
 												)->to_JSON();
 				}
 				
@@ -126,7 +151,7 @@ class json_controller extends simple_object {
 			case 'move':
                 $mandatory = array('db_to', 'tbl_to');
                 if ( $this->check_parameters($mandatory) ) {
-                    $this->answer = $table->move($parameters->db_to, $parameters->tbl_to)->to_JSON();
+                    $this->answer = $table->move($this->parameters->db_to, $this->parameters->tbl_to)->to_JSON();
                 }
 
 			break;
@@ -146,7 +171,7 @@ class json_controller extends simple_object {
             case 'query':
                 $mandatory = array('query');
 				if ( $this->check_parameters($mandatory) ) {
-                    $this->answer = $table->query($parameters->query)->to_JSON();
+                    $this->answer = $table->query($this->parameters->query)->to_JSON();
                 }
                 break;
         
@@ -165,7 +190,7 @@ class json_controller extends simple_object {
 	{
 		foreach ( $mandatory as $parameter )
 		{
-			if ( !isset($this->received_json->parameters->$parameter) )
+			if ( !isset($this->parameters->$parameter) )
 			{
 				// TODO : Throw Exception ?			
 				$this->set_error(_('Missing parameter :') . $parameter);
