@@ -13,6 +13,16 @@ require_once ( LIBS_PATH . 'functions.inc.php');
 # Start your engine
 require_once ( LIBS_PATH . 'init.inc.php' );
 
+# DEV ONLY : Load credentials from local un-commit ini file // TODO To be removed
+if ( !file_exists(LIBS_PATH . '../dev.ini') ) {
+	throw new Exception('INI FILE DOES NOT EXISTS');
+}
+$creds = parse_ini_file( LIBS_PATH . '../dev.ini' );
+foreach ($creds as $key => $value) {
+	define(strtoupper($key), $value);
+}
+# /DEV
+
 # Localization related
 /// POINT is the default decimal separator
 _('.');

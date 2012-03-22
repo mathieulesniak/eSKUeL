@@ -1,11 +1,8 @@
 <?php
 require '../libs/globals.inc.php';
 
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = 'to_be_defined';
-
-$sql_handler = new sql_handler($db_host, $db_username, $db_password);
+var_dump( HOST );
+$sql_handler = new sql_handler(HOST, USERNAME, PASSWORD);
 
 $controller = new json_controller($sql_handler);
 /*
