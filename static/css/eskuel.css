@@ -139,6 +139,8 @@ table.datas
 .datas tr.selected,
 .datas tr.selected th,
 .datas tr.selected td,
+.table tbody tr.selected:hover td,
+.table tbody tr.selected:hover th,
 .datas tr.selected:nth-child(2n+1) td, 
 .datas tr.selected:nth-child(2n+1) th
 {
