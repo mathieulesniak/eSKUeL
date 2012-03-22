@@ -215,7 +215,7 @@ class sql_handler extends simple_object implements db_layer
                 }
         }
         
-        $this->_last_results = array('header' => $results_fields, 'data' => $results);
+        $this->_last_results = array('field' => $results_fields, 'record' => $results);
         return $this;
 	}
     
