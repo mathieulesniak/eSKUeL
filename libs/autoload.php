@@ -15,6 +15,7 @@ return array(
 'json_controller' => './object/object_json_controller.inc.php',
 'simple_object' => './object/object_simple_object.inc.php',
 'sql_handler' => './db_layers/mysql.inc.php',
+'sql_resultset' => './object/object_sql_resultset.inc.php',
 'table' => './object/object_table.inc.php',
 );
 ?>
