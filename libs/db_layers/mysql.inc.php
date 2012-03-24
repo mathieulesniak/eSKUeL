@@ -204,6 +204,7 @@ class sql_handler extends simple_object implements db_layer
                     $results[] = $record;
                 }
         }
+
         if ( count($results) )
         {
                 $i = 0;
@@ -319,6 +320,35 @@ class sql_handler extends simple_object implements db_layer
 
 	function table_move($db_old_name, $table_old_name, $db_new_name, $table_new_name)
 	{
+		// Get original table description
+		$sql = sprintf("SHOW CREATE TABLE `%s`.`%s`", 
+						$db_old_name, $table_old_name);
+		$results = $this->query_and_fetch($sql)->get_results();
+
+		if ( $results !== false ) {
+			$sql = str_replace( sprintf('CREATE TABLE `%s`', $table_old_name), 
+								sprintf('CREATE TABLE `%s`.`%s`', $db_new_name, $table_new_name), 
+								$results['record'][0][1]
+								);
+
+			$this->query($sql);
+			die();
+			// Copy records from the old table to the new one
+			$sql = sprintf("INSERT INTO `%s`.`%s` SELECT * FROM `%s `.`%s`",
+							$db_old_name, $table_old_name,
+							$db_new_name, $table_new_name);
+			
+			$this->query($sql);
+
+			// Delete old table
+			$sql = sprintf("DELETE FROM `%s`.`%s`",
+							$db_old_name, $table_old_name);
+
+			$this->query($sql);
+		}
+		
+
+		
 	}
 
 	function table_add_field()
