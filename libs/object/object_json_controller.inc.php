@@ -129,7 +129,7 @@ class json_controller extends simple_object {
 	{
 
 		$database 	= database::load($this->_parameters->db, $this->_sql_handler);
-		$table 		= table::load($$this->_parameters->tbl, $database, $this->_sql_handler);
+		$table 		= table::load($this->_parameters->tbl, $database, $this->_sql_handler);
 
 		switch ($this->_method) 
 		{
