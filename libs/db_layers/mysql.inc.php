@@ -314,7 +314,8 @@ class sql_handler extends simple_object implements db_layer
 						$db_from, $table_from);
 		$results = $this->query_and_fetch($sql)->get_results();
 
-		if ( $results !== false ) {
+		if ( $results !== false ) 
+		{
 			$sql = str_replace( sprintf('CREATE TABLE `%s`', $table_from), 
 								sprintf('CREATE TABLE `%s`.`%s`', $db_to, $table_to), 
 								$results['record'][0][1]
@@ -348,7 +349,8 @@ class sql_handler extends simple_object implements db_layer
 						$db_old_name, $table_old_name);
 		$results = $this->query_and_fetch($sql)->get_results();
 
-		if ( $results !== false ) {
+		if ( $results !== false ) 
+		{
 			$sql = str_replace( sprintf('CREATE TABLE `%s`', $table_old_name), 
 								sprintf('CREATE TABLE `%s`.`%s`', $db_new_name, $table_new_name), 
 								$results['record'][0][1]
@@ -368,9 +370,6 @@ class sql_handler extends simple_object implements db_layer
 
 			$this->query($sql);
 		}
-		
-
-		
 	}
 
 	function table_add_field()
