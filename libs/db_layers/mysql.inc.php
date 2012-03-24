@@ -332,7 +332,6 @@ class sql_handler extends simple_object implements db_layer
 								);
 
 			$this->query($sql);
-			die();
 			// Copy records from the old table to the new one
 			$sql = sprintf("INSERT INTO `%s`.`%s` SELECT * FROM `%s `.`%s`",
 							$db_old_name, $table_old_name,
