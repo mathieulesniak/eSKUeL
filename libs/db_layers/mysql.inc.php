@@ -308,6 +308,29 @@ class sql_handler extends simple_object implements db_layer
 
 	function table_copy($db_from, $table_from, $db_to, $table_to, $copy_with_data)
 	{
+
+		// Get original table description
+		$sql = sprintf("SHOW CREATE TABLE `%s`.`%s`", 
+						$db_from, $table_from);
+		$results = $this->query_and_fetch($sql)->get_results();
+
+		if ( $results !== false ) {
+			$sql = str_replace( sprintf('CREATE TABLE `%s`', $table_from), 
+								sprintf('CREATE TABLE `%s`.`%s`', $db_to, $table_to), 
+								$results['record'][0][1]
+								);
+
+			$this->query($sql);
+			if ( $copy_with_data ) 
+			{
+				// Copy records from the old table to the new one
+				$sql = sprintf("INSERT INTO `%s`.`%s` SELECT * FROM `%s `.`%s`",
+								$db_from, $table_from,
+								$db_to, $table_to);
+				
+				$this->query($sql);
+			}
+		}
 		return $this;
 	}
 
