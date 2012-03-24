@@ -42,23 +42,35 @@ class database extends simple_object
 
 	function get_tables()
 	{
-		$tables_data = $this->_sql_handler->db_get_tables_infos($this->name);
+		$tables_data = $this->_sql_handler->db_get_tables_infos($this->name)->get_results();
 
 		if ( $tables_data !== false )
 		{
-			$tables = array();
-			foreach ( $tables_data as $resultset )
-			{
-				if ( isset($resultset['Name']) )
+			$tables 	= array();
+			$name_index = NULL;
+
+			foreach ( $tables_data['field'] as $index=>$field ) {
+				if ( $field == 'Name' ) {
+					$name_index = $index;
+					break;
+				}
+			}
+
+
+			if ( $name_index !== NULL ) {
+				foreach ( $tables_data['record'] as $record )
 				{
-					$current_table = table::load_from_array($resultset, $this->_sql_handler);
-					$current_table->database = $this;
+						$resultset = array_combine($tables_data['field'], $record);
+						$current_table = table::load_from_array($resultset, $this->_sql_handler);
+						
+						$current_table->database = $this;
 
-					// Compute stats
-					$this->total_size	+= $current_table->data_length + $current_table->index_length;
-					$this->total_rows	+= $current_table->rows;
+						// Compute stats
+						$this->total_size	+= $current_table->data_length + $current_table->index_length;
+						$this->total_rows	+= $current_table->rows;
 
-					$tables[$resultset['Name']] = $current_table;
+						$tables[$name_index] = $current_table;
+					
 				}
 			}
 			$this->tables = $tables;
