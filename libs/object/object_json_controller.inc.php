@@ -44,7 +44,7 @@ class json_controller extends simple_object {
             }
             else 
 			{
-				throw new Exception( ObjectException::JSON_MISSING_PARAMETER );
+				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
 			}
             
           
@@ -65,13 +65,18 @@ class json_controller extends simple_object {
 					case 'tbl':
 						$this->handle_tbl_scope();
 					break;
+
+					default:
+						throw new ObjectException( ObjectException::UNKNOWN_JSON_SCOPE, null );
+						
+					break;
 				}
 
 				$this->send_answer();
 			}
 			else 
 			{
-				throw new Exception( ObjectException::JSON_MISSING_PARAMETER );
+				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
 			}
 		}
 
