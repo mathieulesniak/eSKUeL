@@ -286,7 +286,7 @@ class sql_handler extends simple_object implements db_layer
 	{
 		$sql = sprintf("SHOW TABLE STATUS FROM `%s`;", $db_name);
 
-		return $this->query($sql)->get_results(MYSQL_ASSOC);
+		return $this->query_and_fetch($sql);
 	}
 
 	// Table related functions
