@@ -9,6 +9,7 @@ class ObjectException extends Exception
 	const MISSING_TRANSLATION_FILE	= 5;
 	const MISSING_TRANSLATION		= 6;
 	const MISSING_JSON_PARAMETER	= 7;
+	const UNKNOWN_JSON_SCOPE		= 8;
 
 	function __construct()
 	{
@@ -42,6 +43,9 @@ class ObjectException extends Exception
 				break;
 			case self::MISSING_JSON_PARAMETER :
 				return _("Missing '%s' parameter");
+				break;
+			case self::UNKNOWN_JSON_SCOPE:
+				return _("Unknown scope for JSON request");
 				break;
 			default:
 				return _('Unknown Object Exception');
