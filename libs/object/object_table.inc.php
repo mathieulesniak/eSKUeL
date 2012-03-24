@@ -146,8 +146,12 @@ class table extends simple_object
 										$db_to, $table_to, $copy_with_data);
 	}
 
-	function move()
+	function move($db_to, $table_to)
 	{
+		return $this->_sql_handler->table_move($this->database->name,
+												$this->name,
+												$db_to,
+												$table_to);
 	}
 
 	function delete()
