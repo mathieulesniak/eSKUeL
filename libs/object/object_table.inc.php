@@ -160,7 +160,7 @@ class table extends simple_object
 
 	function query($query)
 	{
-		return $this->_sql_handler->query_and_fetch($query);
+		return $this->_sql_handler->query_and_fetch($query)->get_results();
 	}
 	function do_empty()
 	{
