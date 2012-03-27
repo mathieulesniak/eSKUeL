@@ -1,6 +1,6 @@
 <?php
 
-interface db_layer 
+interface dbLayer 
 {
 
 	// Reminder only
@@ -13,39 +13,43 @@ interface db_layer
 
 	function query($sql);
     
-    function query_and_fetch($sql);
+    function queryAndFetch($sql);
 
-	function get_results();
+	function getResults($from, $nb);
 
-	function num_rows();
+	function numRows();
+
+	function resultsetFetchFields();
+
+	function resultsetGetSlicedData($start, $length);
 
 	// DB related functions
 
-	function db_list();
+	function dbList();
 
-	function db_get_tables_infos($db_name);
+	function dbGetTablesInfos($db_name);
 
-	function db_create($db_name, $db_options = array());
+	function dbCreate($db_name, $db_options = array());
 
-	function db_delete($db_name);
+	function dbDelete($db_name);
 
 	// Table related functions
 
-	function table_get_fields($db_name, $table_name);
+	function tableGetFields($db_name, $table_name);
 
-	function table_get_indexes($db_name, $table_name);
+	function tableGetIndexes($db_name, $table_name);
 
-	function table_copy($db_from, $table_from, $db_to, $table_to, $copy_with_data);
+	function tableCopy($db_from, $table_from, $db_to, $table_to, $copy_with_data);
 
-	function table_move($db_from, $table_from, $db_to, $table_to);
+	function tableMove($db_from, $table_from, $db_to, $table_to);
 
-	function table_rename($db_old_name, $old_name, $db_new_name, $new_name);
+	function tableRename($db_old_name, $old_name, $db_new_name, $new_name);
 
-	function table_add_field();
+	function tableAddField();
 
-	function table_change_type($db_name, $table_name, $type);
+	function tableChangeType($db_name, $table_name, $type);
 
-	function table_empty($db_name, $table_name);
+	function tableEmpty($db_name, $table_name);
 
 }
 
