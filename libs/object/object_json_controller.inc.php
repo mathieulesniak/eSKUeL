@@ -1,5 +1,5 @@
 <?php
-class json_controller extends simple_object {
+class JsonController extends SimpleObject {
 
 	var $properties = array(
 		'answer'
@@ -47,23 +47,20 @@ class json_controller extends simple_object {
 				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
 			}
             
-          
-            
-            
-			if ( $this->_method != '' && $this->_scope != '' /* && isset($this->parameters)*/ ) 
+			if ( $this->_method != '' && $this->_scope != '' ) 
 			{
 				switch ( $this->_scope ) 
 				{
 					case 'server':
-						$this->handle_server_scope();
+						$this->handleServerScope();
 					break;
 
 					case 'db':
-						$this->handle_db_scope();
+						$this->handleDbScope();
 					break;
 
 					case 'tbl':
-						$this->handle_tbl_scope();
+						$this->handleTblScope();
 					break;
 
 					default:
@@ -72,7 +69,7 @@ class json_controller extends simple_object {
 					break;
 				}
 
-				$this->send_answer();
+				$this->sendAnswer();
 			}
 			else 
 			{
@@ -82,30 +79,30 @@ class json_controller extends simple_object {
 
 	}
 
-	private function handle_server_scope() 
+	private function handleServerScope() 
 	{
 		switch ($this->_method)
 		{
 			case 'processlist':
-                $this->answer = $this->_sql_handler->server_processlist()->to_JSON();
+                $this->answer = $this->_sql_handler->serverProcesslist()->toJson();
 			break;
 
 
 			case 'db_list':
-				$this->answer = $this->_sql_handler->db_list()->to_JSON();
+				$this->answer = $this->_sql_handler->dbList()->toJson();
 			break;
 
 			default:
-				$this->set_error(_('Unknown method'));
+				$this->setError(_('Unknown method'));
 			break;
 		}
 	}
 
-	private function handle_db_scope() 
+	private function handleDbScope() 
 	{
 		$mandatory = array('db');
-		if ( $this->check_parameters($mandatory) ) {
-			$database = database::load($this->_parameters->db, $this->_sql_handler);
+		if ( $this->checkParameters($mandatory) ) {
+			$database = Database::load($this->_parameters->db, $this->_sql_handler);
 			
 			switch ($this->_method) 
 			{
@@ -117,50 +114,52 @@ class json_controller extends simple_object {
 
 				break;
 
-				case 'get_tables':
-					$database->get_tables()->to_JSON();
+				case 'tbl_list':
+					$this->answer = $database->getTables()->export();
+                    echo "DDD";
+                    _p($this->answer);
 				break;
 
 				default:
-					$this->set_error(_('Unknown method'));
+					$this->setError(_('Unknown method'));
 				break;
 			}
 		}
 	}
 
-	private function handle_tbl_scope() 
+	private function handleTblScope() 
 	{
 		$mandatory = array('db', 'tbl');
-		if ( $this->check_parameters($mandatory) ) {
-			$database 	= database::load($this->_parameters->db, $this->_sql_handler);
-			$table 		= table::load($this->_parameters->tbl, $database, $this->_sql_handler);
+		if ( $this->checkParameters($mandatory) ) {
+			$database 	= Database::load($this->_parameters->db, $this->_sql_handler);
+			$table 		= Table::load($this->_parameters->tbl, $database, $this->_sql_handler);
 
 			switch ($this->_method) 
 			{
 				case 'get_fields':
-					$this->answer = $table->get_fields()->to_JSON();
+					$this->answer = $table->getFields()->toJson();
 				break;
 
 				case 'get_indexes':
-					$this->answer = $table->get_indexes()->to_JSON();
+					$this->answer = $table->getIndexes()->toJson();
 				break;
 
 				case 'copy':
 					$mandatory = array('db_to', 'tbl_to', 'copy_data');
-					if ( $this->check_parameters($mandatory) ) {
+					if ( $this->checkParameters($mandatory) ) {
 						$this->answer = $table->copy(
 														$this->_parameters->db_to, 
 														$this->_parameters->tbl_to, 
 														$this->_parameters->copy_data
-													)->to_JSON();
+													)->toJson();
 					}
 					
 				break;
 
 				case 'move':
 	                $mandatory = array('db_to', 'tbl_to');
-	                if ( $this->check_parameters($mandatory) ) {
-	                    $this->answer = $table->move($this->_parameters->db_to, $this->_parameters->tbl_to)->to_JSON();
+	                if ( $this->checkParameters($mandatory) ) {
+	                    $this->answer = $table->move($this->_parameters->db_to, $this->_parameters->tbl_to)->toJson();
 	                }
 
 				break;
@@ -178,32 +177,36 @@ class json_controller extends simple_object {
 				break;
 	            
 	            case 'query':
-	                $mandatory = array('query');
-					if ( $this->check_parameters($mandatory) ) {
-	                    $this->answer = $table->query($this->_parameters->query)->to_JSON();
+	                $mandatory = array('query', 'from', 'nb_records');
+					if ( $this->checkParameters($mandatory) ) {
+	                    $this->answer = $table->query(
+	                    							$this->_parameters->query,
+	                    							$this->_parameters->from,
+	                    							$this->_parameters->nb_records
+	                    							)->toJson();
 	                }
 	                break;
 	        
 				case 'empty':
-	                $this->answer = $table->do_empty()->to_JSON();
+	                $this->answer = $table->doEmpty()->toJson();
 				break;
 
 				default:
-					$this->set_error(_('Unknown method'));
+					$this->setError(_('Unknown method'));
 				break;
 			}
 		}
 
 	}
 
-	private function check_parameters($mandatory) 
+	private function checkParameters($mandatory) 
 	{
 		foreach ( $mandatory as $parameter )
 		{
 			if ( !isset($this->_parameters->$parameter) )
 			{
 				// TODO : Throw Exception ?			
-				$this->set_error(_('Missing parameter :') . $parameter);
+				$this->setError(_('Missing parameter :') . $parameter);
 				return false;
 			}
 		}
@@ -211,7 +214,7 @@ class json_controller extends simple_object {
 		return true;	
 	}
 
-	private function set_error($message) 
+	private function setError($message) 
 	{
 		$this->answer = new stdClass();
 		$this->answer->data = null;
@@ -220,7 +223,7 @@ class json_controller extends simple_object {
 		$this->answer->return_code = -1;
 	}
 
-	private function send_answer() 
+	private function sendAnswer() 
 	{
 		
 		Header("Content-type: application/json");
