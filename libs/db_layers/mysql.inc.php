@@ -1,6 +1,6 @@
 <?php
 
-class sql_handler extends simple_object implements db_layer
+class SQLHandler extends SimpleObject implements DBLayer
 {
 	var $properties = array(
 		'hostname',
@@ -134,7 +134,7 @@ class sql_handler extends simple_object implements db_layer
 
 	function connect()
 	{
-		if ( $this->_db_link == NULL )
+		if ( $this->_db_link == null )
 		{
 			$this->_db_link = mysql_connect($this->hostname, $this->username, $this->password);
 		}
@@ -151,7 +151,7 @@ class sql_handler extends simple_object implements db_layer
 	*/
     function query($query)
     {
-        return $this->do_query($query, false);
+        return $this->doQuery($query, false);
     }
     
     /**
@@ -161,17 +161,17 @@ class sql_handler extends simple_object implements db_layer
 	* @param string $query
 	* @access public
 	*/
-    function query_and_fetch($query)
+    function queryAndFetch($query)
     {
-        return $this->do_query($query, true);
+        return $this->doQuery($query, true);
     }
 
-	private function do_query($query, $do_fetch)
+	private function doQuery($query, $do_fetch)
 	{
 		$this->connect();
         
-        $this->_last_query      = NULL;
-        $this->_last_results    = NULL;
+        $this->_last_query      = null;
+        $this->_last_results    = null;
 
 		$this->_query_id 	    = mysql_query($query, $this->_db_link);
 		$this->_last_query 	    = $query;
@@ -185,46 +185,56 @@ class sql_handler extends simple_object implements db_layer
         {
                 $this->_last_message    = mysql_info($this->_db_link);        
         }
+        $this->_last_results = new SQLResultset($this, $this->_query_id);
         
         if ( $do_fetch && $this->_error_no == 0 )
         {
-                $this->fetch_results();
+                $this->fetchResults();
         }
 		return $this;
 	}
-
-	private function fetch_results()
+    
+    function fetchResults($start = 0, $nb = 'ALL')
 	{
-		$results        = array();
-        $results_fields = array();
-        if ( $this->num_rows() )
-        {
-                while ( $record = mysql_fetch_array($this->_query_id, MYSQL_NUM) )
-                {
-                    $results[] = $record;
-                }
-        }
-
-        if ( count($results) )
-        {
-                $i = 0;
-                $nb_fields = mysql_num_fields($this->_query_id);
-                
-                while ( $i < $nb_fields ) {
-                        $results_fields[$i] = mysql_fetch_field($this->_query_id, $i)->name;
-                        $i++;
-                }
-        }
-        
-        $this->_last_results = array('field' => $results_fields, 'record' => $results);
+		$this->_last_results->slice($start, $nb);
         return $this;
 	}
     
-    function get_results() {
-        return $this->_last_results;
+    // Resultset management
+	function fetchFieldsFromResultset() {
+		$nb_fields 	= mysql_num_fields($this->_query_id);
+		$fields 	= array();
+
+		$i = 0;
+		while ( $i < $nb_fields ) 
+		{
+        	$fields[$i] = mysql_fetch_field($this->_query_id, $i)->name;
+            $i++;
+		}
+
+		return $fields;
+	}
+
+	function getSlicedDataFromResultset($start, $length) 
+	{
+		$results = array();
+		mysql_data_seek($this->_query_id, $start);
+		$to = $start + $length;
+
+		for ( $i = $start; $i < $to; $i++ ) 
+		{
+		
+			$results[$i] = mysql_fetch_array($this->_query_id, MYSQL_NUM);
+		}
+
+		return $results;
+	}
+
+    function getResults($from = 0, $nb = 'ALL') {
+        return $this->_last_results->slice($from, $nb);
     }
 
-	function num_rows()
+	function numRows()
 	{
         if ( is_resource($this->_query_id) )
         {
@@ -235,16 +245,16 @@ class sql_handler extends simple_object implements db_layer
         }
 	}
     
-    function select_db($db)
+    function selectDb($db)
     {
         mysql_select_db($db, $this->_db_link);
         return $this;
     }
     
-    function server_processlist()
+    function serverProcesslist()
     {
         $sql = "SHOW PROCESSLIST;";
-        return $this->query_and_fetch($sql);
+        return $this->query($sql)->getResults();
     }
 
 
@@ -253,15 +263,13 @@ class sql_handler extends simple_object implements db_layer
 	// DB related functions
 	//
 
-	function db_list()
+	function dbList()
 	{
-		$db_list = array();
 		$sql = "SHOW DATABASES";
-
-		return $this->query_and_fetch($sql);
+		return $this->queryAndFetch($sql);
 	}
 
-	function db_create($db_name, $db_options = array())
+	function dbCreate($db_name, $db_options = array())
 	{
 		$valid_options = array('CHARACTER SET', 'COLLATE');
 		$sql = sprintf("CREATE DATABASE `%s`", $db_name);
@@ -276,43 +284,94 @@ class sql_handler extends simple_object implements db_layer
 		$this->query($sql);
 	}
 
-	function db_delete($db_name)
+	function dbDelete($db_name)
 	{
 		$sql = sprintf("DROP DATABASE `%s`;", $db_name);
 
 		$this->query($sql);
 	}
 
-	function db_get_tables_infos($db_name)
+	function dbGetTablesInfos($db_name)
 	{
 		$sql = sprintf("SHOW TABLE STATUS FROM `%s`;", $db_name);
+		$this->queryAndFetch($sql);
 
-		return $this->query_and_fetch($sql);
+		// Alter resultset to comply interface
+		$raw_fields = $this->_last_results->fields;
+		$to_keep 	= array('Name' 			=> 'Name', 
+							'Engine' 		=> 'Engine', 
+							'Rows' 			=> 'Rows', 
+							'Collation' 	=> 'Collation',
+							'Data_length' 	=> 'Size',
+							'Index_length' 	=> 'Size'
+							);
+		$new_fields 	= array_unique(array_values($to_keep));
+		$new_fields_inv = array_flip($new_fields);
+
+		$mapping 	= array();
+		foreach ( $raw_fields as $key=>$field ) {
+			if ( isset($to_keep[$field]) ) 
+			{
+				$mapping[$key] = $new_fields_inv[$to_keep[$field]];
+			}
+		}
+
+		
+		$new_fields_mapping = array_flip($new_fields);
+		$new_records 		= array();
+
+		foreach ( $this->_last_results->records as $key=>$data)
+		{
+			$new_records[$key] = array();
+			foreach ( $data as $field_index=>$field_value )
+			{
+				if ( isset($mapping[$field_index]) ) 
+				{
+
+					if ( isset($new_records[$key][$mapping[$field_index]]) ) {
+						$new_records[$key][$mapping[$field_index]] += $field_value;
+					}
+					else {
+						$new_records[$key][$mapping[$field_index]] = $field_value;
+					}
+					
+				}
+			}
+			$new_records[$key][$new_fields_inv['Size']] = convert_from_bytes($new_records[$key][$new_fields_inv['Size']]);
+		}
+
+		$this->_last_results->fields 			= $new_fields;
+		$this->_last_results->result_records 	= $new_records;
+		$this->_last_results->records 			= $new_records;
+		
+		return $this;
 	}
 
+	//
 	// Table related functions
+	//
 
-	function table_get_fields($db_name, $table_name)
+	function tableGetFields($db_name, $table_name)
 	{
 		$sql = sprintf("DESCRIBE `%s`.`%s`;", $db_name, $table_name);
 
-		return $this->query_and_fetch($sql);
+		return $this->queryAndFetch($sql);
 	}
 
-	function table_get_indexes($db_name, $table_name)
+	function tableGetIndexes($db_name, $table_name)
 	{
 		$sql = sprintf("SHOW INDEX FROM `%s`.`%s`;", $db_name, $table_name);
 
-		return $this->query_and_fetch($sql);
+		return $this->queryAndFetch($sql);
 	}
 
-	function table_copy($db_from, $table_from, $db_to, $table_to, $copy_with_data)
+	function tableCopy($db_from, $table_from, $db_to, $table_to, $copy_with_data)
 	{
 
 		// Get original table description
 		$sql = sprintf("SHOW CREATE TABLE `%s`.`%s`", 
 						$db_from, $table_from);
-		$results = $this->query_and_fetch($sql)->get_results();
+		$results = $this->queryAndFetch($sql)->getResults();
 
 		if ( $results !== false ) 
 		{
@@ -335,19 +394,26 @@ class sql_handler extends simple_object implements db_layer
 		return $this;
 	}
 
-	function table_rename($db_old_name, $table_old_name, $db_new_name, $table_new_name)
+	function tableRename($db_old_name, $table_old_name, $db_new_name, $table_new_name)
 	{
 		$sql = sprintf("ALTER TABLE `%s`.`%s` RENAME `%s`.`%s`;", $db_old_name, $table_old_name, $db_new_name, $table_new_name);
 
 		return $this->query($sql);
 	}
+    
+    function tableDelete($db_name, $table_name)
+    {
+        
+        
+    }
 
-	function table_move($db_old_name, $table_old_name, $db_new_name, $table_new_name)
+
+	function tableMove($db_old_name, $table_old_name, $db_new_name, $table_new_name)
 	{
 		// Get original table description
 		$sql = sprintf("SHOW CREATE TABLE `%s`.`%s`", 
 						$db_old_name, $table_old_name);
-		$results = $this->query_and_fetch($sql)->get_results();
+		$results = $this->queryAndFetch($sql)->get_results();
 
 		if ( $results !== false ) 
 		{
@@ -372,18 +438,18 @@ class sql_handler extends simple_object implements db_layer
 		}
 	}
 
-	function table_add_field()
+	function tableAddField()
 	{
 	}
 
-	function table_change_type($db_name, $table_name, $table_type)
+	function tableChangeType($db_name, $table_name, $table_type)
 	{
 		$sql = sprintf("ALTER TABLE `%s`.`%s` ENGINE=%s", $db_name, $table_name, $table_type);
 
 		return $this->query($sql);
 	}
 
-	function table_empty($db_name, $table_name)
+	function tableEmpty($db_name, $table_name)
 	{
 		$sql = sprintf("DELETE FROM `%s`.`%s`;", $db_name, $table_name);
 
