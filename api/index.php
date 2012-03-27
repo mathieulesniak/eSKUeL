@@ -18,8 +18,8 @@ $str = array(
              'path' => '/db/get_tbl',
              'db' => 'ma_db'
              );
-*/
-$_POST['json'] = json_encode($str);
+
+$_POST['json'] = json_encode($str);*/
 $controller->receive();
 
 ?>
