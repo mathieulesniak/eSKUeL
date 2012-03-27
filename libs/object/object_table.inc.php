@@ -1,7 +1,7 @@
 <?php
 
 
-class table extends simple_object
+class Table extends SimpleObject
 {
 
 	var $properties = array(
@@ -35,11 +35,11 @@ class table extends simple_object
 
 	static function load($table_name, $db_name, $sql_handler)
 	{
-		$table = new table($sql_handler);
+		$table = new Table($sql_handler);
 		
 		$table->name 		= $table_name;
 		$table->database 	= $db_name;
-		$table->_sql_handler->select_db($table->database->name);
+		$table->_sql_handler->selectDb($table->database->name);
 		return $table;
 	}
 
@@ -51,14 +51,14 @@ class table extends simple_object
 	* @param sql_handler $sql_handler
 	* @access public
 	*/
-	static function load_from_array($data, $sql_handler)
+	static function loadFromArray($data, $sql_handler)
 	{
-		$table = new table($sql_handler);
+		$table = new Table($sql_handler);
 
 		foreach ( $data as $key=>$val )
 		{
 			$key = strtolower($key);
-			if ( $table->has_public_property($key) )
+			if ( $table->hasPublicProperty($key) )
 			{
 				$table->$key = $val;
 			}
@@ -74,9 +74,9 @@ class table extends simple_object
 	* @param void
 	* @access public
 	*/
-	function get_fields()
+	function getFields()
 	{
-		return $this->_sql_handler->table_get_fields($this->database->name, $this->name);
+		return $this->_sql_handler->tableGetFields($this->database->name, $this->name);
 
 /*
 		if ( $fields_data !== false )
@@ -102,9 +102,9 @@ class table extends simple_object
 	* @param void
 	* @access public
 	*/
-	function get_indexes()
+	function getIndexes()
 	{
-		return $this->_sql_handler->table_get_indexes($this->database->name, $this->name);
+		return $this->_sql_handler->tableGetIndexes($this->database->name, $this->name);
 		/*if ( $indexes_data !== false )
 		{
 			$indexes = array();
@@ -123,11 +123,11 @@ class table extends simple_object
 		return $this;*/
 	}
 
-	function add_field()
+	function addField()
 	{
 	}
 
-	function change_type()
+	function changeType()
 	{
 	}
 
@@ -141,14 +141,14 @@ class table extends simple_object
 
 	function copy($db_to, $table_to, $copy_with_data = false)
 	{
-		return $this->_sql_handler->table_copy($this->database->name, 
+		return $this->_sql_handler->tableCopy($this->database->name, 
 										$this->name, 
 										$db_to, $table_to, $copy_with_data);
 	}
 
 	function move($db_to, $table_to)
 	{
-		return $this->_sql_handler->table_move($this->database->name,
+		return $this->_sql_handler->tableMove($this->database->name,
 												$this->name,
 												$db_to,
 												$table_to);
@@ -156,15 +156,18 @@ class table extends simple_object
 
 	function delete()
 	{
+		return $this->_sql_handler->tableDelete($this->database->name,
+												 $this->name);
 	}
 
-	function query($query)
+	function query($query, $from, $nb)
 	{
-		return $this->_sql_handler->query_and_fetch($query)->get_results();
+		return $this->_sql_handler->query($query)->getResults($from, $nb);
 	}
-	function do_empty()
+	
+	function doEmpty()
 	{
-		return $this->_sql_handler->table_empty($this->database->name,
+		return $this->_sql_handler->tableEmpty($this->database->name,
 												$this->name);
 	}
 
