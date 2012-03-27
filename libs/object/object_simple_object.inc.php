@@ -1,6 +1,6 @@
 <?php
 
-class simple_object
+class SimpleObject
 {
 
 	protected $properties	= array();
@@ -18,11 +18,11 @@ class simple_object
 
 	function __get($name)
 	{
-		if ( $this->has_public_property($name) )
+		if ( $this->hasPublicProperty($name) )
 		{
 			return isset($this->values[$name]) ? $this->values[$name] : NULL;
 		}
-		else if ( $this->has_private_property($name) )
+		else if ( $this->hasPrivateProperty($name) )
 		{
 			return isset($this->private_values[$name]) ? $this->private_values[$name] : NULL;
 		}
@@ -34,11 +34,11 @@ class simple_object
 
 	function __set($name, $value)
 	{
-		if ( $this->has_public_property($name) )
+		if ( $this->hasPublicProperty($name) )
 		{
 			$this->values[$name] = $value;
 		}
-		else if ( $this->has_private_property($name) )
+		else if ( $this->hasPrivateProperty($name) )
 		{
 			$this->private_values[$name] = $value;
 		}
@@ -52,17 +52,17 @@ class simple_object
 	{
 	}
 
-	function has_public_property($name)
+	function hasPublicProperty($name)
 	{
-		return $this->has_property($name, 'public');
+		return $this->hasProperty($name, 'public');
 	}
 
-	function has_private_property($name)
+	function hasPrivateProperty($name)
 	{
-		return $this->has_property($name, 'private');
+		return $this->hasProperty($name, 'private');
 	}
 
-	private function has_property($name, $scope)
+	private function hasProperty($name, $scope)
 	{
 		switch ($scope)
 		{
@@ -82,13 +82,22 @@ class simple_object
 		return in_array($name, $search_array);
 	}
 
-	public function to_JSON()
+	public function export()
     {
         if ( count($this->output_fields) )
         {
             $object = new stdClass();
-            foreach ( $this->output_fields as $key=>$value ) {
-                $object->$key = $this->$value;
+            foreach ( $this->output_fields as $key=>$value ) 
+            {
+                if ( method_exists($this->$value, 'export') ) 
+                {
+                    $object->$key = $this->$value->export();    
+                }
+                else 
+                {
+                    $object->$key = $this->$value;
+                }
+                
             }
             
             return $object;
