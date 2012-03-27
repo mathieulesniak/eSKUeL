@@ -1,17 +1,25 @@
 <?php
 require '../libs/globals.inc.php';
 
-$sql_handler = new sql_handler(HOST, USERNAME, PASSWORD);
+$sql_handler = new SQLHandler(HOST, USERNAME, PASSWORD);
 
-$controller = new json_controller($sql_handler);
+$controller = new JsonController($sql_handler);
 /*
 $str = array(
-             'path' => '/server/processlist',
-             'db' => 'param1',
-             'tbl' => 'param2'
+             'path' => '/tbl/query',
+             'db' => 'ma_db',
+             'tbl' => 'blog_comments',
+             'query' => 'SELECT * FROM blog_comments',
+             'from' => 0, 
+             'nb_records' => 2
              );
 
-$_POST['json'] = json_encode($str);*/
+$str = array(
+             'path' => '/db/get_tbl',
+             'db' => 'ma_db'
+             );
+*/
+$_POST['json'] = json_encode($str);
 $controller->receive();
 
 ?>
