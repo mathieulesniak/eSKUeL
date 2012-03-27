@@ -1,6 +1,6 @@
 <?php
 
-class field extends simple_object
+class Field extends SimpleObject
 {
 
 	var $properties = array(
@@ -21,9 +21,9 @@ class field extends simple_object
 		$this->table = $table;
 	}
 
-	static function load_from_array($data, $sql_handler)
+	static function loadFromArray($data, $sql_handler)
 	{
-		$field = new field($sql_handler);
+		$field = new Field($sql_handler);
 
 		$constructed_data = array();
 		// Iterate through data, and reassign to good keys
@@ -83,7 +83,7 @@ class field extends simple_object
 		// Iterate through newly built data
 		foreach ( $constructed_data as $key=>$val)
 		{
-			if ( $field->has_public_property($key) )
+			if ( $field->hasPublicProperty($key) )
 			{
 				$field->$key = $val;
 			}
