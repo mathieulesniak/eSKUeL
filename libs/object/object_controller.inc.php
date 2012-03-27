@@ -1,6 +1,6 @@
 <?php
 
-class controller extends simple_object
+class controller extends SimpleObject
 {
 	var $properties = array(
 		'current_db',
