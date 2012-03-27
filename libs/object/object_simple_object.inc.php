@@ -101,7 +101,7 @@ class SimpleObject
 					if ( is_array($this->$value) ) 
 					{
 						$tmp = $this->$value;
-						if ( is_array($tmp[0])) {
+						if ( isset($tmp[0]) && is_array($tmp[0])) {
 							$object->$key = array_merge($this->$value, array('null'=>null));
 						}
 						else {
