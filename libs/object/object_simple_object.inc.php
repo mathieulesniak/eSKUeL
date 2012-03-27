@@ -87,6 +87,7 @@ class SimpleObject
         if ( count($this->output_fields) )
         {
             $object = new stdClass();
+
             foreach ( $this->output_fields as $key=>$value ) 
             {
                 if ( method_exists($this->$value, 'export') ) 
@@ -95,11 +96,26 @@ class SimpleObject
                 }
                 else 
                 {
-                    $object->$key = $this->$value;
+                	// Hack for json_encode when passing array beginning at index 0
+                	// Add str key to force associative array
+					if ( is_array($this->$value) ) 
+					{
+						$tmp = $this->$value;
+						if ( is_array($tmp[0])) {
+							$object->$key = array_merge($this->$value, array('null'=>null));
+						}
+						else {
+							$object->$key = $this->$value;		
+						}
+                	}
+                	else 
+                	{
+                		$object->$key = $this->$value;
+                	}
                 }
                 
             }
-            
+          
             return $object;
         }
         else {
