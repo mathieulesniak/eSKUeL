@@ -23,10 +23,11 @@ class JsonController extends SimpleObject {
 	function receive()
 	{
 		$received_json = getPostParam('json');
-		if ( $received_json != NULL )
+		if ( $received_json != null )
 		{
 			$this->_received_json = json_decode($received_json);
             
+            // Explode path, to get scope and method
             if ( isset($this->_received_json->path) ) {
                 $json_path = explode('/', $this->_received_json->path);
 
@@ -34,8 +35,8 @@ class JsonController extends SimpleObject {
                 $this->_scope    = isset($json_path[1]) ? $json_path[1] : '';
                 $this->_method   = isset($json_path[2]) ? $json_path[2] : '';
                 
-                $this->_parameters = new stdClass();
                 // Build parameters
+                $this->_parameters = new stdClass();
                 foreach ( $this->_received_json as $key=>$val ) {
                     if ( $key != 'path' ) {
                         $this->_parameters->$key = $val;
@@ -64,7 +65,7 @@ class JsonController extends SimpleObject {
 					break;
 
 					default:
-						throw new ObjectException( ObjectException::UNKNOWN_JSON_SCOPE, null );
+						throw new ObjectException( ObjectException::UNKNOWN_JSON_SCOPE );
 						
 					break;
 				}
@@ -84,12 +85,12 @@ class JsonController extends SimpleObject {
 		switch ($this->_method)
 		{
 			case 'processlist':
-                $this->answer = $this->_sql_handler->serverProcesslist()->toJson();
+                $this->answer = $this->_sql_handler->serverProcesslist()->export();
 			break;
 
 
-			case 'db_list':
-				$this->answer = $this->_sql_handler->dbList()->toJson();
+			case 'get_db':
+				$this->answer = $this->_sql_handler->dbList()->export();
 			break;
 
 			default:
@@ -107,17 +108,15 @@ class JsonController extends SimpleObject {
 			switch ($this->_method) 
 			{
 				case 'create':
-
+					$this->answer = $database->create();
 				break;
 
 				case 'delete':
-
+					$this->answer = $database->delete();
 				break;
 
-				case 'tbl_list':
+				case 'get_tbl':
 					$this->answer = $database->getTables()->export();
-                    echo "DDD";
-                    _p($this->answer);
 				break;
 
 				default:
@@ -137,11 +136,11 @@ class JsonController extends SimpleObject {
 			switch ($this->_method) 
 			{
 				case 'get_fields':
-					$this->answer = $table->getFields()->toJson();
+					$this->answer = $table->getFields()->export();
 				break;
 
 				case 'get_indexes':
-					$this->answer = $table->getIndexes()->toJson();
+					$this->answer = $table->getIndexes()->export();
 				break;
 
 				case 'copy':
@@ -151,7 +150,7 @@ class JsonController extends SimpleObject {
 														$this->_parameters->db_to, 
 														$this->_parameters->tbl_to, 
 														$this->_parameters->copy_data
-													)->toJson();
+													)->export();
 					}
 					
 				break;
@@ -159,7 +158,7 @@ class JsonController extends SimpleObject {
 				case 'move':
 	                $mandatory = array('db_to', 'tbl_to');
 	                if ( $this->checkParameters($mandatory) ) {
-	                    $this->answer = $table->move($this->_parameters->db_to, $this->_parameters->tbl_to)->toJson();
+	                    $this->answer = $table->move($this->_parameters->db_to, $this->_parameters->tbl_to)->export();
 	                }
 
 				break;
@@ -183,12 +182,12 @@ class JsonController extends SimpleObject {
 	                    							$this->_parameters->query,
 	                    							$this->_parameters->from,
 	                    							$this->_parameters->nb_records
-	                    							)->toJson();
+	                    							)->export();
 	                }
 	                break;
 	        
 				case 'empty':
-	                $this->answer = $table->doEmpty()->toJson();
+	                $this->answer = $table->doEmpty()->export();
 				break;
 
 				default:
