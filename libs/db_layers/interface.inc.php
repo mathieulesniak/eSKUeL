@@ -1,6 +1,6 @@
 <?php
 
-interface dbLayer 
+interface DbLayer 
 {
 
 	// Reminder only
