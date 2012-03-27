@@ -1,6 +1,6 @@
 <?php
 
-class index extends simple_object
+class Index extends SimpleObject
 {
 
 	var $properties = array(
