@@ -1,6 +1,6 @@
 <?php
 
-interface DbLayer 
+interface DBLayer 
 {
 
 	// Reminder only
@@ -16,12 +16,14 @@ interface DbLayer
     function queryAndFetch($sql);
 
 	function getResults($from, $nb);
+    
+    function fetchResults($from, $nb);
 
 	function numRows();
 
-	function resultsetFetchFields();
+	function fetchFieldsFromResultset();
 
-	function resultsetGetSlicedData($start, $length);
+	function getSlicedDataFromResultset($start, $length);
 
 	// DB related functions
 
