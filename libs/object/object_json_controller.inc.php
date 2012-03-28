@@ -107,14 +107,18 @@ class JsonController extends SimpleObject {
 			
 			switch ($this->_method) 
 			{
-				case 'create':
+				case 'create_db':
 					$this->answer = $database->create();
 				break;
 
-				case 'delete':
+				case 'delete_db':
 					$this->answer = $database->delete();
 				break;
-
+            
+                case 'create_tbl':
+                    
+                break;
+            
 				case 'get_tbl':
 					$this->answer = $database->getTables()->export();
 				break;
@@ -142,6 +146,10 @@ class JsonController extends SimpleObject {
 				case 'get_indexes':
 					$this->answer = $table->getIndexes()->export();
 				break;
+            
+                case 'get_infos':
+                    $this->answer = $table->getInfos()->export();
+                break;
 
 				case 'copy':
 					$mandatory = array('db_to', 'tbl_to', 'copy_data');
@@ -157,14 +165,19 @@ class JsonController extends SimpleObject {
 
 				case 'move':
 	                $mandatory = array('db_to', 'tbl_to');
-	                if ( $this->checkParameters($mandatory) ) {
+	                if ( $this->checkParameters($mandatory) )
+                    {
 	                    $this->answer = $table->move($this->_parameters->db_to, $this->_parameters->tbl_to)->export();
 	                }
 
 				break;
 
 				case 'rename':
-
+                    $mandatory = array('tbl_to');
+                    if ( $this->checkParameters($mandatory) )
+                    {
+                        $this->answer = $table->rename($this->_parameters->tbl_to)->export();
+                    }
 				break;
 
 				case 'add_field':
@@ -172,7 +185,11 @@ class JsonController extends SimpleObject {
 				break;
 
 				case 'change_type':
-
+                    $mandatory = array('type');
+                    if ( $this->checkParameters($mandatory) )
+                    {
+                        $this->answer = $table->changeType($this->_parameters->type)->export();        
+                    }
 				break;
 	            
 	            case 'query':
