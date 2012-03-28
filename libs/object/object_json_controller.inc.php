@@ -155,12 +155,11 @@ class JsonController extends SimpleObject {
 					$mandatory = array('db_to', 'tbl_to', 'copy_data');
 					if ( $this->checkParameters($mandatory) ) {
 						$this->answer = $table->copy(
-														$this->_parameters->db_to, 
-														$this->_parameters->tbl_to, 
-														$this->_parameters->copy_data
-													)->export();
+                                                $this->_parameters->db_to, 
+                                                $this->_parameters->tbl_to,
+                                                $this->_parameters->copy_data
+                                                )->export();
 					}
-					
 				break;
 
 				case 'move':
@@ -183,8 +182,16 @@ class JsonController extends SimpleObject {
 				case 'add_field':
 
 				break;
+            
+                case 'set_comment':
+                    $mandatory = array('comment');
+                    if ( $this->checkParameters($mandatory) ) {
+                        $this->answer = $table->setComment($this->_parameters->comment)->export();
+                    }
+                        
+                break;
 
-				case 'change_type':
+				case 'set_type':
                     $mandatory = array('type');
                     if ( $this->checkParameters($mandatory) )
                     {

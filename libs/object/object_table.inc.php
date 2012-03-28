@@ -135,7 +135,7 @@ class Table extends SimpleObject
 	}
 	
 
-	function changeType()
+	function setType()
 	{
 	}
 
