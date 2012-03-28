@@ -364,6 +364,13 @@ class SQLHandler extends SimpleObject implements DBLayer
 
 		return $this->queryAndFetch($sql);
 	}
+    
+    function tableGetInfos($db_name, $table_name)
+    {
+        $sql = sprintf("SHOW TABLE STATUS FROM `%s` WHERE Name='%s'", $db_name, $table_name);
+        
+        return $this->queryAndFetch($sql);
+    }
 
 	function tableCopy($db_from, $table_from, $db_to, $table_to, $copy_with_data)
 	{

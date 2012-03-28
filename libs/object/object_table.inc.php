@@ -95,6 +95,12 @@ class Table extends SimpleObject
 			$this->fields = $fields;
 		}*/
 	}
+	
+	function addField()
+	{
+	}
+	
+	
 	/**
 	* Build an array of Index objects of current table
 	*
@@ -123,9 +129,11 @@ class Table extends SimpleObject
 		return $this;*/
 	}
 
-	function addField()
+	function getInfos()
 	{
+		return $this->_sql_handler->tableGetInfos($this->database->name, $this->name);
 	}
+	
 
 	function changeType()
 	{
@@ -160,7 +168,7 @@ class Table extends SimpleObject
 												 $this->name);
 	}
 
-	function query($query, $from, $nb)
+	function query($query)
 	{
 		return $this->_sql_handler->query($query)->getResults($from, $nb);
 	}
