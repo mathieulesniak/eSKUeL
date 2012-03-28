@@ -269,19 +269,10 @@ class SQLHandler extends SimpleObject implements DBLayer
 		return $this->queryAndFetch($sql);
 	}
 
-	function dbCreate($db_name, $db_options = array())
+	function dbCreate($db_name)
 	{
-		$valid_options = array('CHARACTER SET', 'COLLATE');
 		$sql = sprintf("CREATE DATABASE `%s`", $db_name);
-		foreach ( $db_options as $key=>$val )
-		{
-				if ( in_array($key, $valid_options) )
-				{
-						$sql .= sprintf(" %s %s", $key, $val);
-				}
-		}
-		
-		$this->query($sql);
+		return $this->query($sql);
 	}
 
 	function dbDelete($db_name)

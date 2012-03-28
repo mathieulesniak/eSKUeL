@@ -31,7 +31,7 @@ interface DBLayer
 
 	function dbGetTablesInfos($db_name);
 
-	function dbCreate($db_name, $db_options = array());
+	function dbCreate($db_name);
 
 	function dbDelete($db_name);
 
