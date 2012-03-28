@@ -92,7 +92,7 @@ class JsonController extends SimpleObject {
                 $mandatory = array('db');
                 if ( $this->checkParameters($mandatory) ) {
                     $database = new Database($this->_parameters->db, $this->_sql_handler);
-                    $this->answer = $database->create();
+                    $this->answer = $database->create()->export();
                 }
 			break;
 
