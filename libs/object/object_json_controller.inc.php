@@ -195,9 +195,13 @@ class JsonController extends SimpleObject {
                     $mandatory = array('type');
                     if ( $this->checkParameters($mandatory) )
                     {
-                        $this->answer = $table->changeType($this->_parameters->type)->export();        
+                        $this->answer = $table->etType($this->_parameters->type)->export();        
                     }
 				break;
+            
+                case 'get_type':
+                        $this->answer = $table->getType()->export();        
+                break;
 	            
 	            case 'query':
 	                $mandatory = array('query', 'from', 'nb_records');

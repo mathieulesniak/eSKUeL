@@ -135,8 +135,16 @@ class Table extends SimpleObject
 	}
 	
 
-	function setType()
+	function getType() {
+		return $this->_sql_handler->tableGetType($this->database->name,
+												 $this->name);
+	}
+	
+	function setType($type)
 	{
+		return $this->_sql_handler->tableSetType($this->database->name,
+												 $this->name,
+												 $type);
 	}
 
 	function export()

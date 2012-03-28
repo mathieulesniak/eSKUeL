@@ -449,12 +449,35 @@ class SQLHandler extends SimpleObject implements DBLayer
 	{
 	}
 
-	function tableChangeType($db_name, $table_name, $table_type)
+	function tableSetType($db_name, $table_name, $table_type)
 	{
 		$sql = sprintf("ALTER TABLE `%s`.`%s` ENGINE=%s", $db_name, $table_name, $table_type);
 
 		return $this->query($sql);
 	}
+    
+    function tableGetType($db_name, $table_name)
+    {
+        $sql = sprintf("SHOW TABLE STATUS FROM `%s` WHERE Name='%s';", $db_name, $table_name);
+		$this->queryAndFetch($sql);
+
+        $field_key = null;
+        foreach ( $this->_last_results->fields as $key=>$field) {
+                if ( $field == 'Engine' ) {
+                        $field_key = $key;
+                }
+        }
+        
+        $new_fields = array('Type');
+        $new_records = array(array($this->_last_results->records[0][$field_key]));
+        
+        $this->_last_results->fields 			= $new_fields;
+		$this->_last_results->result_records 	= $new_records;
+		$this->_last_results->records 			= $new_records;
+        
+        return
+        $this;
+    }
 
 	function tableEmpty($db_name, $table_name)
 	{

@@ -49,7 +49,9 @@ interface DBLayer
 
 	function tableAddField();
 
-	function tableChangeType($db_name, $table_name, $type);
+	function tableSetType($db_name, $table_name, $type);
+    
+    function tableGetType($db_name, $table_name);
 
 	function tableEmpty($db_name, $table_name);
 
