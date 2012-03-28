@@ -32,6 +32,7 @@ class Database extends SimpleObject
 
 	function create()
 	{
+        return $this->_sql_handler->dbCreate($this->name);
 	}
 
 	function delete()
