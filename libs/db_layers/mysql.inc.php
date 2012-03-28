@@ -185,11 +185,18 @@ class SQLHandler extends SimpleObject implements DBLayer
         {
                 $this->_last_message    = mysql_info($this->_db_link);        
         }
-        $this->_last_results = new SQLResultset($this, $this->_query_id);
-        
-        if ( $do_fetch && $this->_error_no == 0 )
+        if ( is_bool($this->_query_id) )
         {
-                $this->fetchResults();
+                $this->_last_results = $this->_query_id;
+        }
+        else
+        {
+                $this->_last_results = new SQLResultset($this, $this->_query_id);
+                
+                if ( $do_fetch && $this->_error_no == 0 )
+                {
+                        $this->fetchResults();
+                }
         }
 		return $this;
 	}
