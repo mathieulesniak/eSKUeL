@@ -87,7 +87,14 @@ class JsonController extends SimpleObject {
 			case 'processlist':
                 $this->answer = $this->_sql_handler->serverProcesslist()->export();
 			break;
-
+            
+            case 'create_db':
+                $mandatory = array('db');
+                if ( $this->checkParameters($mandatory) ) {
+                    $database = new Database($this->_parameters->db, $this->_sql_handler);
+                    $this->answer = $database->create();
+                }
+			break;
 
 			case 'get_db':
 				$this->answer = $this->_sql_handler->dbList()->export();
@@ -107,9 +114,7 @@ class JsonController extends SimpleObject {
 			
 			switch ($this->_method) 
 			{
-				case 'create_db':
-					$this->answer = $database->create();
-				break;
+				
 
 				case 'delete_db':
 					$this->answer = $database->delete();
