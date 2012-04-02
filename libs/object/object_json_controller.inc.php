@@ -43,6 +43,7 @@ class JsonController extends SimpleObject {
                     }
                 }
             }
+            // Unknown path asked, throwing error
             else 
 			{
 				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
@@ -114,8 +115,6 @@ class JsonController extends SimpleObject {
 			
 			switch ($this->_method) 
 			{
-				
-
 				case 'delete_db':
 					$this->answer = $database->delete();
 				break;
@@ -127,6 +126,27 @@ class JsonController extends SimpleObject {
 				case 'get_tbl':
 					$this->answer = $database->getTables()->export();
 				break;
+            
+                case 'query':
+	                $mandatory = array('query', 'from', 'nb_records');
+					if ( $this->checkParameters($mandatory) )
+                    {
+	                    $this->answer = $database->query(
+	                    							$this->_parameters->query,
+	                    							$this->_parameters->from,
+	                    							$this->_parameters->nb_records
+	                    							)->export();
+	                }
+	            break;
+            
+                case 'explain':
+                    $mandatory = array('query');
+                    if ( $this->checkParameters($mandatory) )
+                    {
+                        $this->answer = $database->explain($this->_parameters->query)->export();
+                    }
+                break;
+	            
 
 				default:
 					$this->setError(_('Unknown method'));
@@ -207,17 +227,9 @@ class JsonController extends SimpleObject {
                 case 'get_type':
                         $this->answer = $table->getType()->export();        
                 break;
+            
+                
 	            
-	            case 'query':
-	                $mandatory = array('query', 'from', 'nb_records');
-					if ( $this->checkParameters($mandatory) ) {
-	                    $this->answer = $table->query(
-	                    							$this->_parameters->query,
-	                    							$this->_parameters->from,
-	                    							$this->_parameters->nb_records
-	                    							)->export();
-	                }
-	                break;
 	        
 				case 'empty':
 	                $this->answer = $table->doEmpty()->export();

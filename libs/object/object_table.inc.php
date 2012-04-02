@@ -1,6 +1,4 @@
 <?php
-
-
 class Table extends SimpleObject
 {
 
@@ -174,11 +172,6 @@ class Table extends SimpleObject
 	{
 		return $this->_sql_handler->tableDelete($this->database->name,
 												 $this->name);
-	}
-
-	function query($query)
-	{
-		return $this->_sql_handler->query($query)->getResults($from, $nb);
 	}
 	
 	function doEmpty()

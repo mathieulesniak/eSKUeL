@@ -26,9 +26,17 @@ class Database extends SimpleObject
 	static function load($name, $sql_handler)
 	{
 		$database = new Database($name, $sql_handler);
+        $database->selectDB();
 
 		return $database;
 	}
+    
+    function selectDB()
+    {
+        $this->_sql_handler->selectDb($this->name);
+        
+        return $this;    
+    }
 
 	function create()
 	{
@@ -45,6 +53,11 @@ class Database extends SimpleObject
         return $this->_sql_handler->dbGetTablesInfos($this->name);
 
 	}
+    
+    function query($query, $from, $nb)
+    {
+        return $this->_sql_handler->query($query)->getResults($from, $nb);
+    }
 
 }
 
