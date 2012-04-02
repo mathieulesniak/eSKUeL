@@ -354,6 +354,13 @@ class SQLHandler extends SimpleObject implements DBLayer
 		
 		return $this;
 	}
+    
+    function explain($query)
+    {
+        $sql = "EXPLAIN " . $query;
+        
+        return $this->queryAndFetch($sql);
+    }
 
 	//
 	// Table related functions

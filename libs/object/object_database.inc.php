@@ -58,6 +58,11 @@ class Database extends SimpleObject
     {
         return $this->_sql_handler->query($query)->getResults($from, $nb);
     }
+    
+    function explain($query)
+    {
+        return $this->_sql_handler->explain($query)->getResults();
+    }
 
 }
 
