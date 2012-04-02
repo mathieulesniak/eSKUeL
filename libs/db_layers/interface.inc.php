@@ -13,6 +13,8 @@ interface DBLayer
 
 	function query($sql);
     
+    function explain($sql);
+    
     function queryAndFetch($sql);
 
 	function getResults($from, $nb);
