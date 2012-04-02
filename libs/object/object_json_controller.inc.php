@@ -75,7 +75,7 @@ class JsonController extends SimpleObject {
 			}
 			else 
 			{
-				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
+				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER, 'scope');
 			}
 		}
 
