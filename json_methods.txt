@@ -1,0 +1,25 @@
+# SCOPE server
+
+/server/processlist
+/server/create_db
+/server/get_db
+
+# SCOPE db
+/db/delete_db
+/db/create_tbl
+/db/get_tbl
+/db/query
+/db/explain
+
+# SCOPE tbl
+/tbl/get_fields
+/tbl/get_indexes
+/tbl/get_infos
+/tbl/copy
+/tbl/move
+/tbl/rename
+/tbl/add_fields
+/tbl/set_type
+/tbl/set_comment
+/tbl/get_type
+/tbl/empty
