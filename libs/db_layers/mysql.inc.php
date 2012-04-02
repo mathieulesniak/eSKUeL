@@ -177,27 +177,30 @@ class SQLHandler extends SimpleObject implements DBLayer
 		$this->_last_query 	    = $query;
 		$this->_error_no 	    = mysql_errno();
 		$this->_error_msg 	    = mysql_error();
+        
         if ( $this->_error_no !== 0 )
         {
                 $this->_last_message    = $this->_error_msg;
         }
         else
         {
-                $this->_last_message    = mysql_info($this->_db_link);        
-        }
-        if ( is_bool($this->_query_id) )
-        {
-                $this->_last_results = $this->_query_id;
-        }
-        else
-        {
-                $this->_last_results = new SQLResultset($this, $this->_query_id);
-                
-                if ( $do_fetch && $this->_error_no == 0 )
+                $this->_last_message    = mysql_info($this->_db_link);
+                if ( is_bool($this->_query_id) )
                 {
+                    $this->_last_results = $this->_query_id;
+                }
+                else
+                {
+                    $this->_last_results = new SQLResultset($this, $this->_query_id);
+                
+                    if ( $do_fetch && $this->_error_no == 0 )
+                    {
                         $this->fetchResults();
+                    }
                 }
         }
+        
+        
 		return $this;
 	}
     
@@ -238,7 +241,14 @@ class SQLHandler extends SimpleObject implements DBLayer
 	}
 
     function getResults($from = 0, $nb = 'ALL') {
-        return $this->_last_results->slice($from, $nb);
+        
+        if ( $this->_last_results !== null ) {
+            return $this->_last_results->slice($from, $nb);
+        }
+        else {
+            return $this;
+        }
+        
     }
 
 	function numRows()
