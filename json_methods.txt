@@ -1,3 +1,8 @@
+# SCOPE layer
+/layer/get_fields_types
+/layer/get_fields_functions
+/layer/get_specific_functions
+
 # SCOPE server
 
 /server/processlist

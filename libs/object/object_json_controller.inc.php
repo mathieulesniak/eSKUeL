@@ -41,6 +41,10 @@ class JsonController extends SimpleObject {
 			{
 				switch ( $this->_scope ) 
 				{
+                    case 'layer':
+                        $this->handleLayerScope();
+                    break;
+                
 					case 'server':
 						$this->handleServerScope();
 					break;
@@ -69,6 +73,28 @@ class JsonController extends SimpleObject {
         }
 	}
 
+    private function handleLayerScope()
+    {
+        switch ($this->_method)
+        {
+            case 'get_fields_types':
+                $this->answer = $this->_sql_handler->layerFieldsTypes()->export();
+            break;
+        
+            case 'get_fields_functions':
+                $this->answer = $this->_sql_handler->layerFieldsFunctions()->export();
+            break;
+            
+            case 'get_specific_functions':
+                $this->answer = $this->_sql_handler->layerSpecificFunctions()->export();
+            break;
+        
+            default:
+                $this->setError(_('Unknown method'));
+            break;
+            
+        }
+    }
 	private function handleServerScope() 
 	{
 		switch ($this->_method)

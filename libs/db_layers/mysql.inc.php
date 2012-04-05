@@ -131,6 +131,45 @@ class SQLHandler extends SimpleObject implements DBLayer
 
 		$this->connect();
 	}
+    
+    function layerFieldsTypes()
+    {
+        $fields         = array('fieldsTypes');
+        $records        = $this->field_types;
+        
+        $this->_last_results = new stdClass;
+        $this->_last_results->fields 			= $fields;
+		$this->_last_results->result_records 	= $records;
+		$this->_last_results->records 			= $records;
+        
+        return $this;
+    }
+    
+    function layerSpecificFunctions()
+    {
+        $fields         = array('specificFunctions');
+        $records        = $this->specific_methods;
+        
+        $this->_last_results = new stdClass;
+        $this->_last_results->fields 			= $fields;
+		$this->_last_results->result_records 	= $records;
+		$this->_last_results->records 			= $records;
+        
+        return $this;
+    }
+    
+    function layerFieldsFunctions()
+    {
+        $fields         = array('fieldsFunctions');
+        $records        = $this->field_functions;
+        
+        $this->_last_results = new stdClass;
+        $this->_last_results->fields 			= $fields;
+		$this->_last_results->result_records 	= $records;
+		$this->_last_results->records 			= $records;
+        
+        return $this;
+    }
 
 	function connect()
 	{

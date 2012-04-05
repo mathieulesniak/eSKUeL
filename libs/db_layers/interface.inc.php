@@ -9,6 +9,11 @@ interface DBLayer
 	// var $field_types = array();
 	// var $field_functions = array();
 
+
+    function layerFieldsTypes();
+    function layerSpecificFunctions();
+    function layerFieldsFunctions();
+    
 	function connect();
 
 	function query($sql);
