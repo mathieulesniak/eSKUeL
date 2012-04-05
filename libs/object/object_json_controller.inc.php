@@ -6,7 +6,6 @@ class JsonController extends SimpleObject {
 	);
 
 	var $private_properties = array(
-        '_received_json',
 		'_sql_handler',
         '_scope',
         '_method',
@@ -22,34 +21,23 @@ class JsonController extends SimpleObject {
 
 	function receive()
 	{
-		$received_json = getPostParam('json');
-		if ( $received_json != null )
+		$received_call = getPostParam('path');
+		if ( $received_call !== false )
 		{
-			$this->_received_json = json_decode($received_json);
-            
-            // Explode path, to get scope and method
-            if ( isset($this->_received_json->path) ) {
-                $json_path = explode('/', $this->_received_json->path);
-
-                // Build scope and method
-                $this->_scope    = isset($json_path[1]) ? $json_path[1] : '';
-                $this->_method   = isset($json_path[2]) ? $json_path[2] : '';
-                
-                // Build parameters
-                $this->_parameters = new stdClass();
-                foreach ( $this->_received_json as $key=>$val ) {
-                    if ( $key != 'path' ) {
-                        $this->_parameters->$key = $val;
-                    }
+			$request_path = explode('/', $received_call);
+            $this->_scope    = isset($request_path[1]) ? $request_path[1] : '';
+            $this->_method   = isset($request_path[2]) ? $request_path[2] : '';
+            $this->_parameters = new stdClass();
+            foreach ( $_POST as $key=>$val ) {
+                if ( $key != 'path'
+                    && !in_array($key, $this->properties)
+                    && !in_array($key, $this->private_properties)
+                    ) {
+                    $this->_parameters->$key = $val;
                 }
             }
-            // Unknown path asked, throwing error
-            else 
-			{
-				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER );
-			}
             
-			if ( $this->_method != '' && $this->_scope != '' ) 
+            if ( $this->_method != '' && $this->_scope != '' ) 
 			{
 				switch ( $this->_scope ) 
 				{
@@ -77,8 +65,8 @@ class JsonController extends SimpleObject {
 			{
 				throw new ObjectException( ObjectException::MISSING_JSON_PARAMETER, 'scope');
 			}
-		}
-
+            
+        }
 	}
 
 	private function handleServerScope() 
